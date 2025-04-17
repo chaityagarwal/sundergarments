@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { getFeaturedProducts, getProducts } from "@/lib/firestore/products/read_server";
 import Header from "./components/Header";
 import FeaturedProductSlider from "./components/Sliders";
