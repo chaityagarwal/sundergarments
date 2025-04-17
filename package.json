@@ -1,0 +1,30 @@
+{
+  "name": "sundergarments",
+  "version": "0.1.0",
+  "private": true,
+  "scripts": {
+    "dev": "next dev",
+    "build": "next build",
+    "start": "next start",
+    "lint": "next lint"
+  },
+  "dependencies": {
+    "@heroui/react": "^2.6.14",
+    "@mui/icons-material": "^7.0.2",
+    "@nextui-org/react": "^2.6.11",
+    "firebase": "^11.2.0",
+    "framer-motion": "^12.0.6",
+    "lucide-react": "^0.475.0",
+    "next": "15.1.6",
+    "react": "^19.0.0",
+    "react-dom": "^19.0.0",
+    "react-hot-toast": "^2.5.1",
+    "react-slick": "^0.30.3",
+    "slick-carousel": "^1.8.1",
+    "swr": "^2.3.2"
+  },
+  "devDependencies": {
+    "postcss": "^8",
+    "tailwindcss": "^3.4.1"
+  }
+}
