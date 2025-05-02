@@ -8,7 +8,7 @@ export async function generateMetadata({ params }) {
   const product = await getProduct({ id: productId });
 
   return {
-    title: `${product?.title} | Product`,
+    title: `${product?.productName} | Product`,
     description: product?.shortDescription ?? "",
     openGraph: {
       images: [product?.featureImageURL],

@@ -18,6 +18,7 @@ export default function ProductsGridView({ products }) {
 
 export function ProductCard({ product }) {
   return (
+    <Link href={`/products/${product?.productId}`}>
     <div className="flex flex-col gap-3 border p-4 rounded-lg">
       <div className="relative w-full">
         <img
@@ -26,11 +27,9 @@ export function ProductCard({ product }) {
           alt={product?.productName}
         />
       </div>
-      <Link href={`/products/${product?.productId}`}>
         <h1 className="font-semibold line-clamp-2 text-sm">
           {product?.productName}
         </h1>
-      </Link>
       <div className="">
         {product?.isSale ? (
           <h2 className="text-green-500 text-sm font-semibold">
@@ -48,25 +47,19 @@ export function ProductCard({ product }) {
       <p className="text-xs text-gray-500 line-clamp-2">
         {product?.productDescription}
       </p>
+
       <div className="flex items-center gap-4 w-full">
         <div className="w-full">
           <AuthContextProvider>
             <div className="flex items-center gap-4">
-              <a
-                href={`https://wa.me/919830464031?text=${encodeURIComponent(
-                  `Hello Sunder Garments \nI want to know about this product \n${product?.productName} \n${product?.productId}`
-                )}`}
-                target="_blank"
-                rel="noopener noreferrer"
-              >
                 <button className="bg-blue-500 text-white text-xs md:text-sm px-4 py-1.5 rounded-lg">
                   BUY NOW
                 </button>
-              </a>
             </div>
           </AuthContextProvider>
         </div>
       </div>
     </div>
+    </Link>
   );
 }

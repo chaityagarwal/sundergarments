@@ -1,4 +1,4 @@
-import { Heart, Search, ShoppingCart, UserCircle2 } from "lucide-react";
+import { Search, UserCircle2 } from "lucide-react";
 import Link from "next/link";
 import LogoutButton from "./LogoutButton";
 import AuthContextProvider from "@/contexts/AuthContext";
@@ -36,14 +36,6 @@ export default function Header() {
         })}
       </div>
       <div className="flex items-center gap-1">
-        <Link href={`/search`}>
-          <button
-            title="Search Products"
-            className="h-8 w-8 flex justify-center items-center rounded-full hover:bg-gray-50"
-          >
-            <Search size={14} />
-          </button>
-        </Link>
         <AuthContextProvider>
           <HeaderClientButtons />
         </AuthContextProvider>

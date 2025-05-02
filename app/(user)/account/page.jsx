@@ -1,97 +1,76 @@
-// "use client";
+"use client";
 
-// import { useAuth } from "@/contexts/AuthContext";
-// import { useOrders } from "@/lib/firestore/orders/read";
-// import { CircularProgress } from "@nextui-org/react";
+import { useEffect, useState } from 'react';
+import { getAuth } from 'firebase/auth';
+import { getFirestore, collection, doc, onSnapshot } from 'firebase/firestore';
 
-// export default function Page() {
-//   const { user } = useAuth();
+export default function Page() {
+  const [orders, setOrders] = useState([]);
+  const [loading, setLoading] = useState(true);
 
-//   const { data: orders, error, isLoading } = useOrders({ uid: user?.uid });
+  useEffect(() => {
+    const auth = getAuth();
+    const db = getFirestore();
+    const user = auth.currentUser;
+    if (!user) return;
 
-//   if (isLoading) {
-//     return (
-//       <div className="flex justify-center py-48">
-//         <CircularProgress />
-//       </div>
-//     );
-//   }
+    const ordersRef = collection(db, 'orders', user.uid, 'confirmOrders');
+    const unsubscribe = onSnapshot(
+      ordersRef,
+      (snapshot) => {
+        const orderData = snapshot.docs.map((doc) => ({
+          id: doc.id,
+          ...doc.data(),
+        }));
+        setOrders(orderData);
+        setLoading(false);
+      },
+      (error) => {
+        console.error('Error fetching orders:', error);
+        setLoading(false);
+      }
+    );
 
-//   if (error) {
-//     return <>{error}</>;
-//   }
+    return () => unsubscribe();
+  }, []);
 
-//   return (
-//     <main className="flex flex-col gap-4 p-5">
-//       <h1 className="text-2xl font-semibold">My Orders</h1>
-//       {(!orders || orders?.length === 0) && (
-//         <div className="flex flex-col items-center justify-center gap-3 py-11">
-//           <div className="flex justify-center">
-//             <img className="h-44" src="/svgs/Empty-pana.svg" alt="" />
-//           </div>
-//           <h1>You have no order</h1>
-//         </div>
-//       )}
-//       <div className="flex flex-col gap-3">
-//         {orders?.map((item, orderIndex) => {
-//           const totalAmount = item?.checkout?.line_items?.reduce(
-//             (prev, curr) => {
-//               return (
-//                 prev + (curr?.price_data?.unit_amount / 100) * curr?.quantity
-//               );
-//             },
-//             0
-//           );
-//           return (
-//             <div className="flex flex-col gap-2 border rounded-lg p-4">
-//               <div className="flex flex-col gap-2">
-//                 <div className="flex gap-3">
-//                   <h3>{orderIndex + 1}</h3>
-//                   <h3 className="bg-blue-100 text-blue-500 text-xs rounded-lg px-2 py-1 uppercase">
-//                     {item?.paymentMode}
-//                   </h3>
-//                   <h3 className="bg-green-100 text-green-500 text-xs rounded-lg px-2 py-1 uppercase">
-//                     {item?.status ?? "pending"}
-//                   </h3>
-//                   <h3 className="text-green-600">₹ {totalAmount}</h3>
-//                 </div>
-//                 <h4 className="text-gray-600 text-xs">
-//                   {item?.timestampCreate?.toDate()?.toString()}
-//                 </h4>
-//               </div>
-//               <div>
-//                 {item?.checkout?.line_items?.map((product) => {
-//                   return (
-//                     <div className="flex gap-2 items-center">
-//                       <img
-//                         className="h-10 w-10 rounded-lg"
-//                         src={product?.price_data?.product_data?.images?.[0]}
-//                         alt="Product Image"
-//                       />
-//                       <div>
-//                         <h1 className="">
-//                           {product?.price_data?.product_data?.name}
-//                         </h1>
-//                         <h1 className="text-gray-500 text-xs">
-//                           ₹ {product?.price_data?.unit_amount / 100}{" "}
-//                           <span>X</span>{" "}
-//                           <span>{product?.quantity?.toString()}</span>
-//                         </h1>
-//                       </div>
-//                     </div>
-//                   );
-//                 })}
-//               </div>
-//             </div>
-//           );
-//         })}
-//       </div>
-//     </main>
-//   );
-// }
+  return (
+    <main className="p-5">
+      <h1 className="text-2xl font-bold mb-4">Your Orders</h1>
 
-export default function Page(){
-  return <main className="p-5">
-    <h1>Account</h1>
-  </main>
+      {loading ? (
+        <div className="text-center py-4">Loading orders...</div>
+      ) : orders.length === 0 ? (
+        <div className="text-center py-4">No orders found!</div>
+      ) : (
+        <div className="space-y-4">
+          {orders.map((order) => (
+            <div
+              key={order.id}
+              className="bg-white shadow rounded p-4 flex items-center space-x-4"
+            >
+              <img
+                src={order.productImages?.[0]}
+                alt="Product"
+                className="w-12 h-12 rounded-full object-cover"
+              />
+              <div className="flex-1">
+                <h3 className="font-semibold">{order.productName}</h3>
+                <div className="text-sm text-gray-600">
+                  ₹{order.productTotalPrice} —{' '}
+                  {order.status === 0 ? (
+                    <span className="text-blue-500">In Process..</span>
+                  ) : order.status === 1 ? (
+                    <span className="text-green-600">Delivered</span>
+                  ) : (
+                    <span className="text-red-600">Cancelled</span>
+                  )}
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+    </main>
+  );
 }

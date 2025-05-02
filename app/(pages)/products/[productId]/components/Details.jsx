@@ -1,5 +1,6 @@
 import { getCategory } from "@/lib/firestore/categories/read_server";
 import AuthContextProvider from "@/contexts/AuthContext";
+import AddToCartButton from "@/app/components/AddToCartButton";
 import Link from "next/link";
 
 export default function Details({ product }) {
@@ -31,21 +32,24 @@ export default function Details({ product }) {
           <div className="flex items-center gap-4">
             <a
               href={`https://wa.me/919830464031?text=${encodeURIComponent(
-                `Hello Sunder Garments \nI want to know about this product \n${product?.productName} \n${product?.productId}`
+                `Hello Sunder Garments \nI want to know about this product \n${product?.productName} \n${product?.productId} \n Product Image: ${product.productImages[0]}`
               )}`}
               target="_blank"
               rel="noopener noreferrer"
             >
               <button className="bg-blue-500 text-white text-xs md:text-sm px-4 py-1.5 rounded-lg">
-                BUY NOW
+                WhatsApp
               </button>
             </a>
           </div>
         </AuthContextProvider>
-
-        {/*<AuthContextProvider>
-          <AddToCartButton type={"cute"} productId={product?.productId} />
-        </AuthContextProvider>*/}
+        <AuthContextProvider>
+          <AddToCartButton product={{
+      ...product,
+      createdAt: product.createdAt?.toDate?.() ?? null,
+      updatedAt: product.updatedAt?.toDate?.() ?? null,
+    }}/>
+        </AuthContextProvider>
       </div>
       <div className="flex flex-col gap-2 py-2">
         <div

@@ -1,90 +1,88 @@
 "use client";
 
 import { useAuth } from "@/contexts/AuthContext";
-import { useUser } from "@/lib/firestore/user/read";
-import { updateCarts } from "@/lib/firestore/user/write";
-import { Button } from "@nextui-org/react";
 import { useState } from "react";
-import toast from "react-hot-toast";
-import AddShoppingCartIcon from "@mui/icons-material/AddShoppingCart";
-import ShoppingCartIcon from "@mui/icons-material/ShoppingCart";
 import { useRouter } from "next/navigation";
+import { doc, getDoc, setDoc, updateDoc } from "firebase/firestore";
+import { db } from "@/lib/firebase";
+import toast from "react-hot-toast";
 
-export default function AddToCartButton({ productId, type }) {
+export default function AddToCartButton({ product }) {
   const { user } = useAuth();
-  const { data } = useUser({ uid: user?.uid });
   const [isLoading, setIsLoading] = useState(false);
   const router = useRouter();
 
-  const isAdded = data?.carts?.find((item) => item?.id === productId);
-
-  const handlClick = async () => {
+  const handleAddToCart = async () => {
+    if (isLoading) return;
     setIsLoading(true);
+
     try {
       if (!user?.uid) {
         router.push("/login");
-        throw new Error("Please Logged In First!");
+        toast.error("Please log in first");
+        return;
       }
-      if (isAdded) {
-        const newList = data?.carts?.filter((item) => item?.id != productId);
-        await updateCarts({ list: newList, uid: user?.uid });
-      } else {
-        await updateCarts({
-          list: [...(data?.carts ?? []), { id: productId, quantity: 1 }],
-          uid: user?.uid,
+
+      const uid = user.uid;
+      const productId = product?.productId?.toString();
+
+      const docRef = doc(db, "cart", uid, "cartOrders", productId);
+      const docSnap = await getDoc(docRef);
+
+      const productPrice = parseFloat(
+        product.isSale ? product.salePrice : product.fullPrice
+      );
+
+      if (docSnap.exists()) {
+        const currentQuantity = docSnap.data().productQuantity || 1;
+        const newQuantity = currentQuantity + 1;
+
+        await updateDoc(docRef, {
+          productQuantity: newQuantity,
+          productTotalPrice: productPrice * newQuantity,
         });
+
+        toast.success("Product quantity updated in cart");
+      } else {
+        await setDoc(doc(db, "cart", uid), {
+          uId: uid,
+          createdAt: new Date(),
+        });
+
+        await setDoc(docRef, {
+          productId: product.productId,
+          categoryId: product.categoryId,
+          productName: product.productName,
+          categoryName: product.categoryName,
+          salePrice: product.salePrice,
+          fullPrice: product.fullPrice,
+          productImages: product.productImages,
+          deliveryTime: product.deliveryTime,
+          isSale: product.isSale,
+          productDescription: product.productDescription,
+          createdAt: new Date(),
+          updatedAt: new Date(),
+          productQuantity: 1,
+          productTotalPrice: productPrice,
+        });
+
+        toast.success("Product added to cart");
       }
     } catch (error) {
-      toast.error(error?.message);
+      console.error(error);
+      toast.error("Something went wrong");
     }
+
     setIsLoading(false);
   };
 
-  if (type === "cute") {
-    return (
-      <Button
-        isLoading={isLoading}
-        isDisabled={isLoading}
-        onClick={handlClick}
-        variant="bordered"
-        className=""
-      >
-        {!isAdded && "Add To Cart"}
-        {isAdded && "Click To Remove"}
-      </Button>
-    );
-  }
-
-  if (type === "large") {
-    return (
-      <Button
-        isLoading={isLoading}
-        isDisabled={isLoading}
-        onClick={handlClick}
-        variant="bordered"
-        className=""
-        color="primary"
-        size="sm"
-      >
-        {!isAdded && <AddShoppingCartIcon className="text-xs" />}
-        {isAdded && <ShoppingCartIcon className="text-xs" />}
-        {!isAdded && "Add To Cart"}
-        {isAdded && "Click To Remove"}
-      </Button>
-    );
-  }
-
   return (
-    <Button
-      isLoading={isLoading}
-      isDisabled={isLoading}
-      onClick={handlClick}
-      variant="flat"
-      isIconOnly
-      size="sm"
+    <button
+      onClick={handleAddToCart}
+      disabled={isLoading}
+      className="bg-blue-500 text-white text-xs md:text-sm px-4 py-1.5 rounded-lg"
     >
-      {!isAdded && <AddShoppingCartIcon className="text-xs" />}
-      {isAdded && <ShoppingCartIcon className="text-xs" />}
-    </Button>
+      {isLoading ? "Loading..." : "Add to Cart"}
+    </button>
   );
 }
