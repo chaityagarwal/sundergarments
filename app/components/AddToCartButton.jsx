@@ -29,9 +29,9 @@ export default function AddToCartButton({ product }) {
       const docRef = doc(db, "cart", uid, "cartOrders", productId);
       const docSnap = await getDoc(docRef);
 
-      const productPrice = parseFloat(
+      const productPrice = Number(parseFloat(
         product.isSale ? product.salePrice : product.fullPrice
-      );
+      ));
 
       if (docSnap.exists()) {
         const currentQuantity = docSnap.data().productQuantity || 1;
@@ -39,7 +39,7 @@ export default function AddToCartButton({ product }) {
 
         await updateDoc(docRef, {
           productQuantity: newQuantity,
-          productTotalPrice: productPrice * newQuantity,
+          productTotalPrice: Number(productPrice * newQuantity),
         });
 
         toast.success("Product quantity updated in cart");

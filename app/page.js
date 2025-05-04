@@ -16,13 +16,16 @@ export default async function Home() {
       getProducts(),
     ]);
                                                            
-  return (
-    <main className="w-screen h-screen overflow-x-hidden overflow-y-auto"> 
-      <Header />
-      <FeaturedProductSlider featuredProducts={featuredProducts} />
-      <Categories categories={categories} />
-      <ProductsGridView products={products} />
-      <Footer />
-    </main>
-  );
+    return (
+      <div className="flex flex-col min-h-screen w-screen overflow-x-hidden">
+        <Header />
+        <main className="flex-1 overflow-y-auto">
+          <FeaturedProductSlider featuredProducts={featuredProducts} />
+          <Categories categories={categories} />
+          <ProductsGridView products={products} />
+        </main>
+        <Footer />
+      </div>
+    );
+    
 }

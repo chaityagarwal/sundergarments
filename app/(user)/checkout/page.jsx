@@ -32,7 +32,10 @@ const Checkout = () => {
         }));
         setCartItems(items);
         setTotal(
-          items.reduce((sum, item) => sum + (item.productTotalPrice || 0), 0)
+          items.reduce(
+            (sum, item) => sum + parseFloat(item.productTotalPrice || 0),
+            0
+          )
         );
       }
     );
@@ -72,6 +75,7 @@ const Checkout = () => {
         customerName: form.name,
         customerPhone: form.phone,
         customerAddress: form.address,
+        customerDeviceToken: "",
         orderStatus: 0,
         createdAt: new Date(),
       };
@@ -79,15 +83,31 @@ const Checkout = () => {
       await setDoc(doc(db, "orders", user.uid), orderMeta);
 
       for (const docSnap of querySnapshot.docs) {
+        const data = docSnap.data();
+
         const orderData = {
-          ...docSnap.data(),
+          productId: data.productId,
+          categoryId: data.categoryId,
+          productName: data.productName,
+          categoryName: data.categoryName,
+          salePrice: data.salePrice,
+          fullPrice: data.fullPrice,
+          productImages: data.productImages,
+          deliveryTime: data.deliveryTime,
+          isSale: data.isSale,
+          productDescription: data.productDescription,
+          createdAt: new Date(),
+          updatedAt: data.updatedAt,
+          productQuantity: data.productQuantity,
+          productTotalPrice: parseFloat((data.productTotalPrice || 0).toString()) + 0.00001,
           customerId: user.uid,
+          status: 0,
           customerName: form.name,
           customerPhone: form.phone,
           customerAddress: form.address,
-          status: 0,
-          createdAt: new Date(),
+          customerDeviceToken: "",
         };
+
         const orderId = generateOrderId();
         await setDoc(
           doc(db, "orders", user.uid, "confirmOrders", orderId),

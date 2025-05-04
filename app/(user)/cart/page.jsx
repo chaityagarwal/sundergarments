@@ -70,11 +70,11 @@ export default function CartPage() {
     const ref = doc(db, "cart", user.uid, "cartOrders", item.productId);
     const newQty = item.productQuantity + 1;
     const unitPrice = item.isSale ? item.salePrice : item.fullPrice;
-    const newTotal = newQty * unitPrice;
+    const newTotal = newQty * parseFloat(unitPrice);
 
     await updateDoc(ref, {
       productQuantity: newQty,
-      productTotalPrice: newTotal,
+      productTotalPrice: parseFloat(newTotal),
     });
   };
 
@@ -92,10 +92,10 @@ export default function CartPage() {
       await deleteDoc(ref);
     } else {
       const unitPrice = item.isSale ? item.salePrice : item.fullPrice;
-      const newTotal = newQty * unitPrice;
+      const newTotal = newQty * parseFloat(unitPrice);
       await updateDoc(ref, {
         productQuantity: newQty,
-        productTotalPrice: newTotal,
+        productTotalPrice: parseFloat(newTotal),
       });
     }
   };
