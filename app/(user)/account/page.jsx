@@ -35,8 +35,8 @@ export default function Page() {
   }, []);
 
   return (
-    <main className="p-5">
-      <h1 className="text-2xl font-bold mb-4">Your Orders</h1>
+    <main className="p-6 max-w-2xl mx-auto">
+      <h1 className="text-2xl font-semibold mb-4 text-red-500">Your Orders</h1>
 
       {loading ? (
         <div className="text-center py-4">Loading orders...</div>
@@ -57,7 +57,7 @@ export default function Page() {
               <div className="flex-1">
                 <h3 className="font-semibold">{order.productName}</h3>
                 <div className="text-sm text-gray-600">
-                  ₹{order.productTotalPrice} —{' '}
+                  Rs. {order.productTotalPrice.toFixed(2)} —{' '}
                   {order.status === 0 ? (
                     <span className="text-blue-500">In Process..</span>
                   ) : order.status === 1 ? (

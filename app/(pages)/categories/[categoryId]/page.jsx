@@ -21,7 +21,7 @@ export default async function Page({ params }) {
   return (
     <main className="flex justify-center p-5 md:px-10 md:py-5 w-full">
       <div className="flex flex-col gap-6 max-w-[900px] p-5">
-        <h1 className="text-center font-semibold text-4xl">{category.categoryName}</h1>
+        <h1 className="text-center font-semibold text-4xl text-red-500">{category.categoryName}</h1>
         {products?.length === 0 ? (
           <p className="text-center text-gray-500 text-lg mt-10">
             No products found in this category.

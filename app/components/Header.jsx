@@ -20,7 +20,7 @@ export default function Header() {
     },
   ];
   return (
-    <nav className="sticky top-0 z-50 bg-white bg-opacity-65 backdrop-blur-2xl py-3 px-4 md:py-4 md:px-16 border-b flex items-center justify-between">
+    <nav className="sticky top-0 z-50 bg-red-300 bg-opacity-65 backdrop-blur-2xl py-3 px-4 md:py-4 md:px-16 border-b flex items-center justify-between">
       <Link href={"/"}>
         <img className="h-4 md:h-5" src="https://firebasestorage.googleapis.com/v0/b/sundergarments-a564f.firebasestorage.app/o/SG_logo.png?alt=media&token=c7a9b97b-4f5d-4be4-bb5f-c0f1def10c21" alt="Logo" />
       </Link>

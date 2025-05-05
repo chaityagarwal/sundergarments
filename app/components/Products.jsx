@@ -5,7 +5,7 @@ export default function ProductsGridView({ products }) {
   return (
     <section className="w-full flex justify-center">
       <div className="flex flex-col gap-5 max-w-[900px] p-5">
-        <h1 className="text-center font-semibold text-lg">Products</h1>
+        <h1 className="text-center font-semibold text-lg text-red-500">Products</h1>
         <div className="grid grid-cols-1 md:grid-cols-3 lg:grid-cols-4 gap-4 md:gap-5">
           {products?.map((item) => {
             return <ProductCard product={item} key={item?.productId} />;
@@ -33,14 +33,14 @@ export function ProductCard({ product }) {
       <div className="">
         {product?.isSale ? (
           <h2 className="text-green-500 text-sm font-semibold">
-            ₹ {product?.salePrice}{" "}
+            Rs. {product?.salePrice}{" "}
             <span className="line-through text-xs text-gray-600">
-              ₹ {product?.fullPrice}
+              Rs. {product?.fullPrice}
             </span>
           </h2>
         ) : (
           <h2 className="text-green-500 text-sm font-semibold">
-            ₹ {product?.fullPrice}
+            Rs. {product?.fullPrice}
           </h2>
         )}
       </div>
@@ -52,7 +52,7 @@ export function ProductCard({ product }) {
         <div className="w-full">
           <AuthContextProvider>
             <div className="flex items-center gap-4">
-                <button className="bg-blue-500 text-white text-xs md:text-sm px-4 py-1.5 rounded-lg">
+                <button className="bg-red-500 text-white text-xs md:text-sm px-4 py-1.5 rounded-lg">
                   BUY NOW
                 </button>
             </div>

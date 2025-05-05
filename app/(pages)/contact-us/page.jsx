@@ -3,7 +3,7 @@ import React from 'react';
 const ContactUs = () => {
   return (
     <div className="p-6 max-w-3xl mx-auto">
-      <h1 className="text-2xl font-bold mb-4">Contact Us</h1>
+      <h1 className="text-2xl font-bold mb-4 text-red-500">Contact Us</h1>
       <p className="mb-2">We’d love to hear from you! If you have any questions, feedback, or concerns, please reach out.</p>
       <ul className="space-y-2">
         <li><strong>Email:</strong> k_1980daga@yahoo.com        </li>

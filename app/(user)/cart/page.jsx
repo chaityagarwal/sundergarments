@@ -118,7 +118,7 @@ export default function CartPage() {
 
   return (
     <div className="p-6 max-w-2xl mx-auto">
-      <h1 className="text-2xl font-semibold mb-4">Your Cart</h1>
+      <h1 className="text-2xl font-semibold mb-4 text-red-500">Your Cart</h1>
       {cartItems.length === 0 ? (
         <p>Your cart is empty.</p>
       ) : (
@@ -139,7 +139,7 @@ export default function CartPage() {
                 <div className="flex flex-col space-y-1">
                   <h2 className="font-medium text-sm">{item.productName}</h2>
                   <p className="text-xs text-gray-600">
-                    Total: Rs.{item.productTotalPrice.toFixed(2)}
+                    Total: Rs. {item.productTotalPrice.toFixed(2)}
                   </p>
                 </div>
               </div>
@@ -169,10 +169,10 @@ export default function CartPage() {
           ))}
           <div className="mt-6 text-right">
             <p className="text-xl font-semibold">
-              Total: Rs.{totalPrice.toFixed(2)}
+              Total: Rs. {totalPrice.toFixed(2)}
             </p>
             <button
-              className="mt-4 p-3 bg-blue-500 text-white rounded"
+              className="mt-4 p-3 bg-red-500 text-white rounded"
               onClick={() => router.push("/checkout")}
             >
               Proceed to Checkout

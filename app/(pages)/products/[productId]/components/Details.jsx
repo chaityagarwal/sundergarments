@@ -9,7 +9,7 @@ export default function Details({ product }) {
       <div className="flex gap-3">
         <Category categoryId={product?.categoryId} />
       </div>
-      <h1 className="font-semibold text-xl md:text-4xl">
+      <h1 className="font-semibold text-xl md:text-4xl text-red-500">
         {product?.productName}
       </h1>
       <h2 className="text-gray-600 text-sm line-clamp-3 md:line-clamp-4">
@@ -17,14 +17,14 @@ export default function Details({ product }) {
       </h2>
       {product?.isSale ? (
         <h3 className="text-green-500 font-bold text-lg">
-          ₹ {product?.salePrice}{" "}
+          Rs. {product?.salePrice}{" "}
           <span className="line-through text-gray-700 text-sm">
-            ₹ {product?.fullPrice}
+            Rs. {product?.fullPrice}
           </span>
         </h3>
       ) : (
         <h3 className="text-green-500 font-bold text-lg">
-          ₹ {product?.fullPrice}
+          Rs. {product?.fullPrice}
         </h3>
       )}
       <div className="flex flex-wrap items-center gap-4">
@@ -32,12 +32,12 @@ export default function Details({ product }) {
           <div className="flex items-center gap-4">
             <a
               href={`https://wa.me/919830464031?text=${encodeURIComponent(
-                `Hello Sunder Garments \nI want to know about this product \n${product?.productName} \n${product?.productId} \n Product Image: ${product.productImages[0]}`
+                `Hello Sunder Garments \nI want to know about this product \nProduct Name: ${product?.productName} \nProduct ID: ${product?.productId} \nProduct Image: ${product.productImages[0]}`
               )}`}
               target="_blank"
               rel="noopener noreferrer"
             >
-              <button className="bg-blue-500 text-white text-xs md:text-sm px-4 py-1.5 rounded-lg">
+              <button className="bg-red-500 text-white text-xs md:text-sm px-4 py-1.5 rounded-lg">
                 WhatsApp
               </button>
             </a>

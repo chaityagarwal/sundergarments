@@ -50,7 +50,7 @@ export default function Page() {
           <img className="h-12" src="https://firebasestorage.googleapis.com/v0/b/sundergarments-a564f.firebasestorage.app/o/SG_logo.png?alt=media&token=c7a9b97b-4f5d-4be4-bb5f-c0f1def10c21" alt="Logo" />
         </div>
         <div className="flex flex-col gap-3 bg-white md:p-10 p-5 rounded-xl md:min-w-[440px] w-full">
-          <h1 className="font-bold text-xl">Login With Email</h1>
+          <h1 className="font-bold text-xl text-red-500">Login With Email</h1>
           <form
             onSubmit={(e) => {
               e.preventDefault();
@@ -85,18 +85,19 @@ export default function Page() {
               isDisabled={isLoading}
               type="submit"
               color="primary"
+              className="bg-red-500 text-white text-xs md:text-sm px-4 py-1.5 rounded-lg"
             >
               Login
             </Button>
           </form>
           <div className="flex justify-between">
             <Link href={`/sign-up`}>
-              <button className="font-semibold text-xs text-blue-700">
+              <button className="font-semibold text-xs text-red-500">
                 New? Create Account
               </button>
             </Link>
             <Link href={`/forget-password`}>
-              <button className="font-semibold text-xs text-blue-700">
+              <button className="font-semibold text-xs text-red-500">
                 Forget Password?
               </button>
             </Link>
@@ -117,8 +118,7 @@ function SignInWithGoogleComponent() {
       const user = await signInWithPopup(auth, new GoogleAuthProvider)
       .then((result) => {
         const user = result.user;
-    
-        // ✅ Store user info in session storage instead of cookies
+  
         sessionStorage.setItem("user", JSON.stringify(user));
     
         console.log("User signed in:", user);
@@ -139,7 +139,11 @@ function SignInWithGoogleComponent() {
     setIsLoading(false);
   };
   return (
-    <Button isLoading={isLoading} isDisabled={isLoading} onPress={handleLogin}>
+    <Button isLoading={isLoading} 
+    isDisabled={isLoading} 
+    onPress={handleLogin} 
+    className="bg-red-500 text-white text-xs md:text-sm px-4 py-1.5 rounded-lg"
+    >
       Sign In With Google
     </Button>
   );

@@ -46,12 +46,16 @@ const Checkout = () => {
     await deleteDoc(doc(db, "cart", user.uid, "cartOrders", id));
   };
 
-  const openWhatsApp = (productName, productId) => {
+  const openWhatsApp = (items) => {
     const number = "+919830464031";
-    const message = `Hello Sunder Garments\nOrder placed for this product:\n${productName} ${productId}`;
+    const messageLines = items.map(
+      (item) => `${item.name} ${item.id}`
+    );
+    const message = `Hello Sunder Garments\nOrder placed for these products:\n${messageLines.join("\n")}`;
     const url = `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
     window.open(url, "_blank");
   };
+  
 
   const generateOrderId = () => {
     const now = Date.now(); // milliseconds since epoch
@@ -81,6 +85,7 @@ const Checkout = () => {
       };
 
       await setDoc(doc(db, "orders", user.uid), orderMeta);
+      const orderItems = [];
 
       for (const docSnap of querySnapshot.docs) {
         const data = docSnap.data();
@@ -114,7 +119,10 @@ const Checkout = () => {
           orderData
         );
         await deleteDoc(doc(db, "cart", user.uid, "cartOrders", docSnap.id));
-        openWhatsApp(orderData.productName, orderData.productId);
+        orderItems.push({ name: orderData.productName, id: orderData.productId });
+      }
+      if (orderItems.length > 0) {
+        openWhatsApp(orderItems);
       }
 
       toast.success("Order Placed Successfully!");
@@ -126,8 +134,8 @@ const Checkout = () => {
   };
 
   return (
-    <div className="p-4">
-      <h1 className="text-xl font-bold mb-4">Checkout</h1>
+    <div className="p-6 max-w-2xl mx-auto">
+      <h1 className="text-2xl font-semibold mb-4 text-red-500">Checkout</h1>
       {cartItems.length === 0 ? (
         <p>No products found!</p>
       ) : (
@@ -188,7 +196,7 @@ const Checkout = () => {
 
             <button
               onClick={placeOrder}
-              className="w-full mt-4 bg-blue-600 text-white p-3 rounded hover:bg-blue-700"
+              className="w-full mt-4 bg-red-500 text-white p-3 rounded hover:bg-red-300"
             >
               Confirm Order
             </button>

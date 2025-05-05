@@ -80,7 +80,7 @@ export default function AddToCartButton({ product }) {
     <button
       onClick={handleAddToCart}
       disabled={isLoading}
-      className="bg-blue-500 text-white text-xs md:text-sm px-4 py-1.5 rounded-lg"
+      className="bg-red-500 text-white text-xs md:text-sm px-4 py-1.5 rounded-lg"
     >
       {isLoading ? "Loading..." : "Add to Cart"}
     </button>
