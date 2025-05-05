@@ -18,7 +18,7 @@ export default function Footer() {
           </div>
           <div className="flex gap-2 items-center">
             <MapPin size={12} className="text-red-700" />
-            <h2 className="text-sm font-semibold text-black">Howrah</h2>
+            <h2 className="text-sm font-semibold text-black">Kolkata</h2>
           </div>
         </div>
       </div>
